@@ -10,8 +10,9 @@
 #define SEM_SPACE 1
 #define SEM_MUTEX 2
 
+#define PRODUCT_MIN 0
 #define PRODUCT_MAX 100
-#define SHM_SIZE (1024*1024)
+#define SHM_SIZE 1024
 
 union semun {
     int val;
@@ -55,11 +56,7 @@ int main() {
 
     init();
     /* fork one child process as a consumer and parent process is a producer */
-    int pid = fork();
-    if (pid > 0)
-        producer();
-    if (pid == 0)
-        consumer();
+    consumer();
 
 	dt_and_del_shared_memory();
 
@@ -75,21 +72,21 @@ void init() {
     /* the semget() system call returns the System V semaphore set identifier associated with the argument key */
     sem_id = semget((key_t) 1234, 3, 0666 | IPC_CREAT);
     /* sem_array contains three values which will set each the three semaphores in the semaphore set */
-    unsigned short sem_array[3] = {0, PRODUCT_MAX, 1};
+    unsigned short sem_array[3] = {PRODUCT_MIN, PRODUCT_MAX, 1};
     sem_union.array = sem_array;
     set_semaphores_all(sem_union);
 	/* the shmget() returns the identifier of the System V shared memory associated with the value of the argument key */
-	if((shm_id = shmget(IPC_PRIVATE, SHM_SIZE, 0666 | IPC_CREAT)) < 0) {
+	if((shm_id = shmget((key_t)2222, SHM_SIZE, 0666 | IPC_CREAT)) < 0) {
 		fprintf(stderr, "shmget failed\n");
 		exit(EXIT_FAILURE);
 	}
 	/* attach pshm identified by shm_id to address space*/
 	pshm = (struct shm *)shmat(shm_id, (void *)0, 0);
-	pshm->product = 0;
+	//pshm->product = 0;
 
-    printf("product init is\033[1;35m %d\033[0m\n", semctl(sem_id, SEM_PRODUCT, GETVAL));
-    printf("space init is\033[1;35m %d\033[0m\n", semctl(sem_id, SEM_SPACE, GETVAL));
-    printf("-------start-------\n");
+    //printf("product init is\033[1;35m %d\033[0m\n", semctl(sem_id, SEM_PRODUCT, GETVAL));
+    //printf("space init is\033[1;35m %d\033[0m\n", semctl(sem_id, SEM_SPACE, GETVAL));
+    //printf("-------start-------\n");
 }
 
 /* set values for above three semaphores */
@@ -178,14 +175,14 @@ void producer() {
 void consumer() {
     while (1) {
         semaphore_p(SEM_PRODUCT);  // operation p product
-        semaphore_p(SEM_MUTEX);  // lock mutex
+        //semaphore_p(SEM_MUTEX);  // lock mutex
 
 		--pshm->product;
         printf("One\033[1;34m consumed\033[0m,\033[1;34m %d\033[0m products and\033[1;34m %d\033[0m spaces left\n",
                pshm->product, PRODUCT_MAX - pshm->product);
 		//printf("%d\t%d\n", getpid(), getppid());
 	
-        semaphore_v(SEM_MUTEX);  // unlock mutex
+        //semaphore_v(SEM_MUTEX);  // unlock mutex
         semaphore_v(SEM_SPACE);  // operation v space
         sleep(rand() % 5);
     }
