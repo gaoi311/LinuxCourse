@@ -1,0 +1,20 @@
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 1500
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0xfe<compat,link,site,host>
+        loop  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wifi1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.43.106  netmask 255.255.255.0  broadcast 192.168.43.255
+        inet6 2409:8930:3e12:b0a:810c:62f5:d464:acdc  prefixlen 64  scopeid 0x0<global>
+        inet6 2409:8930:3e12:b0a:7475:8712:8f5d:8ba4  prefixlen 128  scopeid 0x0<global>
+        inet6 fe80::810c:62f5:d464:acdc  prefixlen 64  scopeid 0xfd<compat,link,site,host>
+        ether 40:a5:ef:f7:39:f8  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+

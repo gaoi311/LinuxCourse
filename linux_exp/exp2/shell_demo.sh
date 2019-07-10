@@ -4,12 +4,21 @@ USER=`whoami`
 
 file_run()
 {
-echo "you must complete it"
+		for i in `ls`
+		do
+				if test -x $i;then
+						echo $i
+				fi
+		done
 }
 uers()
 {
-echo "there are `who|wc -l` users online"
-echo -e "who are\n`who|awk '{print $1}'`" 
+		echo "there are `who | wc -l` users online"
+		for i in "who are \n`who | awk '{print $1}'`"
+		do
+				echo -n $i
+				echo -n " "
+		done
 }
 
 while :
